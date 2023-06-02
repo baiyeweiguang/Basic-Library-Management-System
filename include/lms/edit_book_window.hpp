@@ -26,8 +26,8 @@ class EditBookWindow : public Gtk::Dialog {
   Database::SharedPtr database_;
   Book book_;
   Gtk::Box box_;
-  Gtk::Label title_label_, author_label_, isbn_label_;
-  Gtk::Entry title_entry_, author_entry_, isbn_entry_;
+  Gtk::Label title_label_, author_label_, isbn_label_, category_label_;
+  Gtk::Entry title_entry_, author_entry_, isbn_entry_, category_entry_;
   Gtk::Button save_button_, delete_button_;
 };
 

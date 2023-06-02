@@ -3,7 +3,6 @@
 
 // GTKMM
 #include <gtkmm.h>
-
 // Project
 #include "database.hpp"
 
@@ -18,7 +17,9 @@ class AddBookWindow : public Gtk::Dialog {
 
  private:
   Gtk::Box box_;
-  Gtk::Label title_label_, author_label_, isbn_label_;
+  Gtk::ComboBoxText category_combobox_;
+  Gtk::Calendar calendar_;
+  Gtk::Label title_label_, author_label_, isbn_label_, category_label_;
   Gtk::Entry title_entry_, author_entry_, isbn_entry_;
   Database::SharedPtr database_;
 };

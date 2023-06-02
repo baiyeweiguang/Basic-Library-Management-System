@@ -34,6 +34,8 @@ class Database {
   int delete_book(int id);
   int update_book(const Book &book);
   Book get_book_by_id(int id);
+  std::string get_category_name_by_id(int id);
+  std::vector<std::pair<std::string, int>> get_book_count_by_category();
   std::vector<Book> get_books();
 
  private:

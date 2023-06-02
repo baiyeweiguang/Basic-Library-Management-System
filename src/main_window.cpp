@@ -19,8 +19,10 @@ MainWindow::MainWindow(Database::SharedPtr database)
   tree_view_.set_model(list_store_);
   tree_view_.append_column("ID", columns_.id);
   tree_view_.append_column("Title", columns_.title);
+  tree_view_.append_column("Category", columns_.category);
   tree_view_.append_column("Author", columns_.author);
   tree_view_.append_column("ISBN", columns_.isbn);
+  tree_view_.append_column("Publication Date", columns_.publication_date);
   tree_view_.signal_row_activated().connect(
       sigc::mem_fun(*this, &MainWindow::on_tree_view_row_activated));
 
@@ -67,8 +69,17 @@ void MainWindow::refresh_books() {
     auto row = *(list_store_->append());
     row[columns_.id] = book.get_id();
     row[columns_.title] = book.get_title();
+    std::string category_name =
+        database_->get_category_name_by_id(std::stoi(book.get_category_id()));
+    row[columns_.category] = category_name;
     row[columns_.author] = book.get_author();
     row[columns_.isbn] = book.get_isbn();
+    std::string publication_date =
+        std::to_string(book.get_publication_date().tm_year + 1900) + "-" +
+        std::to_string(book.get_publication_date().tm_mon + 1) + "-" +
+        std::to_string(book.get_publication_date().tm_mday);
+    std::cout<<publication_date<<std::endl;
+    row[columns_.publication_date] = publication_date;
   }
 }
 }  // namespace lms
