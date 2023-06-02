@@ -1,5 +1,7 @@
 #include "lms/database.hpp"
 #include <ctime>
+#include <iomanip>
+#include <sstream>
 
 namespace lms {
 Database::Database(const DatabaseConfig &config) {
@@ -79,9 +81,16 @@ std::vector<Book> Database::get_books() {
       std::string author = result_set->getString("author");
       std::string isbn = result_set->getString("isbn");
       std::string category_id = result_set->getString("category_id");
-      std::tm publication_date;
+      // Convert string to std::tm
+      std::string publication_date_str =
+          result_set->getString("publication_date");
+      std::tm publication_date = {};
+      std::istringstream iss(publication_date_str);
+      iss >> std::get_time(&publication_date, "%Y-%m-%d");
 
-      books.emplace_back(id, title, category_id, author, isbn);
+      Book book(id, title, category_id, author, isbn);
+      book.set_publication_date(publication_date);
+      books.emplace_back(book);
     }
   } catch (const sql::SQLException &e) {
     std::cerr << "Error executing get_books query: " << e.what() << std::endl;

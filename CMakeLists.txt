@@ -19,6 +19,7 @@ set(SRC
         src/book.cpp
         src/database.cpp
         src/edit_book_window.cpp
+        src/sorted_window.cpp
         src/main_window.cpp)
 add_executable(library_management_system ${SRC})
 target_include_directories(library_management_system PUBLIC

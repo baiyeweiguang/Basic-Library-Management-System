@@ -1,19 +1,25 @@
 #include "lms/main_window.hpp"
 #include "lms/add_book_window.hpp"
 #include "lms/edit_book_window.hpp"
+#include "lms/sorted_books_window.hpp"
 
 namespace lms {
 MainWindow::MainWindow(Database::SharedPtr database)
-    : database_(database), button_("Add Book") {
+    : database_(database), add_button_("Add Book"), sorted_books_button_("Sort") {
   this->Window::set_title("Library Management System");
   this->Window::set_border_width(10);
   this->Window::set_default_size(800, 600);
 
-  button_.signal_clicked().connect(
+  add_button_.signal_clicked().connect(
       sigc::mem_fun(*this, &MainWindow::on_button_add));
-  box_.set_spacing(10);
-  box_.pack_start(button_, Gtk::PACK_SHRINK);
-  this->Window::add(box_);
+
+  sorted_books_button_.signal_clicked().connect(
+      sigc::mem_fun(*this, &MainWindow::on_sorted_books_button_clicked));
+
+  main_box_.set_spacing(10);
+  main_box_.pack_start(add_button_,Gtk::PACK_SHRINK);
+  main_box_.pack_start(sorted_books_button_, Gtk::PACK_SHRINK);
+  this->Window::add(main_box_);
 
   list_store_ = Gtk::ListStore::create(columns_);
   tree_view_.set_model(list_store_);
@@ -28,7 +34,9 @@ MainWindow::MainWindow(Database::SharedPtr database)
 
   scrolled_window_.add(tree_view_);
   scrolled_window_.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-  box_.pack_start(scrolled_window_);
+//  main_box_.set_spacing(10);
+  main_box_.pack_start(scrolled_window_);
+//  this->Window::add(main_box_);
 
   this->refresh_books();
 
@@ -42,6 +50,11 @@ void MainWindow::on_button_add() {
   if (result == Gtk::RESPONSE_OK) {
     this->refresh_books();
   }
+}
+
+void MainWindow::on_sorted_books_button_clicked() {
+  SortedBooksWindow sorted_books_window(database_);
+  sorted_books_window.run();
 }
 
 void MainWindow::on_tree_view_row_activated(const Gtk::TreeModel::Path &path,
@@ -78,7 +91,6 @@ void MainWindow::refresh_books() {
         std::to_string(book.get_publication_date().tm_year + 1900) + "-" +
         std::to_string(book.get_publication_date().tm_mon + 1) + "-" +
         std::to_string(book.get_publication_date().tm_mday);
-    std::cout<<publication_date<<std::endl;
     row[columns_.publication_date] = publication_date;
   }
 }

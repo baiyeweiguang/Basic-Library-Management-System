@@ -12,17 +12,21 @@ namespace lms {
 class MainWindow : public Gtk::Window {
  public:
   explicit MainWindow(Database::SharedPtr database);
-   ~MainWindow() = default;
+  ~MainWindow() = default;
 
  protected:
   void on_button_add();
+  void on_sorted_books_button_clicked();
   void refresh_books();
-  void on_tree_view_row_activated(const Gtk::TreeModel::Path & path, Gtk::TreeViewColumn* column);
+  void on_tree_view_row_activated(const Gtk::TreeModel::Path &path,
+                                  Gtk::TreeViewColumn* column);
 
  private:
+  Gtk::VBox vertical_box_;
+  Gtk::Box main_box_;
   Gtk::Window window_;
-  Gtk::Box box_;
-  Gtk::Button button_;
+  Gtk::Button sorted_books_button_;
+  Gtk::Button add_button_;
   Gtk::ScrolledWindow scrolled_window_;
   Gtk::TreeView tree_view_;
   Glib::RefPtr<Gtk::ListStore> list_store_;
@@ -32,4 +36,3 @@ class MainWindow : public Gtk::Window {
 
 }  // namespace lms
 #endif  // LMS__MAIN_WINDOW_HPP_
-
