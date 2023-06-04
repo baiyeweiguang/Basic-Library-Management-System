@@ -3,6 +3,7 @@
 
 // GTKMM
 #include <gtkmm.h>
+
 // Project
 #include "lms/database.hpp"
 
@@ -22,22 +23,7 @@ class SortedBooksWindow : public Gtk::Dialog {
   Gtk::ScrolledWindow scrolled_window_;
   Gtk::TreeView tree_view_;
   Glib::RefPtr<Gtk::ListStore> list_store_;
-  struct Columns : public Gtk::TreeModel::ColumnRecord {
-    Gtk::TreeModelColumn<int> id;
-    Gtk::TreeModelColumn<Glib::ustring> title;
-    Gtk::TreeModelColumn<Glib::ustring> category;
-    Gtk::TreeModelColumn<Glib::ustring> author;
-    Gtk::TreeModelColumn<Glib::ustring> isbn;
-    Gtk::TreeModelColumn<Glib::ustring> publication_date;
-    Columns() {
-      add(id);
-      add(title);
-      add(category);
-      add(author);
-      add(isbn);
-      add(publication_date);
-    }
-  } columns_;
+  Book::ColumnRecord columns_;
 };
 
 }  // namespace lms

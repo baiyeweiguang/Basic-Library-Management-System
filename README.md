@@ -24,24 +24,12 @@ sudo apt-get update
 2. Install the required dependencies:
 
 ```bash
-sudo apt-get install libgtkmm-3.0-dev libmysqlcppconn-dev
+sudo apt-get install libgtkmm-3.0-dev mysql-server libmysqlcppconn-dev
 ```
 
 3. Clone the project repository:
 
-```bash
-git clone https://github.com/your-username/your-repo.git
-```
-
-Replace `your-username` and `your-repo` with the appropriate GitHub username and repository name.
-
-4. Navigate to the project folder:
-
-```bash
-cd your-repo
-```
-
-5. Compile the project:
+4. Compile the project:
 
 ```bash
 mkdir build && cd build
@@ -49,7 +37,7 @@ cmake ..
 make
 ```
 
-6. Run the application:
+5. Run the application:
 
 ```bash
 ./library_management_system

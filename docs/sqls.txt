@@ -1,0 +1,38 @@
+CREATE TABLE book_authors (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    book_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    nationality VARCHAR(50),
+    FOREIGN KEY (book_id) REFERENCES books(id)
+);
+
+CREATE TABLE sales (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    book_id INT NOT NULL,
+    quantity INT NOT NULL,
+    unit_price DECIMAL(10, 2) NOT NULL,
+    sale_date DATE NOT NULL,
+    CONSTRAINT fk_sales_book_id FOREIGN KEY (book_id) REFERENCES books (id)
+);
+
+
+-- 添加新的字段
+ALTER TABLE book_authors
+ADD COLUMN sex ENUM('Man', 'Female') NOT NULL;
+
+
+-- 添加新的author_id列
+ALTER TABLE books
+ADD COLUMN author_id VARCHAR(255);
+
+-- 将多个作者ID合并为一个逗号分隔的字符串，并存储到author_id列中
+UPDATE books
+SET author_id = (
+    SELECT GROUP_CONCAT(book_authors.book_id)
+    FROM book_authors
+    WHERE book_authors.book_id = books.id
+);
+
+-- 删除原有的author列
+ALTER TABLE books
+DROP COLUMN author;

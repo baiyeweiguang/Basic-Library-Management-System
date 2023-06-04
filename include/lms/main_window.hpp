@@ -20,11 +20,13 @@ class MainWindow : public Gtk::Window {
   void refresh_books();
   void on_tree_view_row_activated(const Gtk::TreeModel::Path &path,
                                   Gtk::TreeViewColumn* column);
+  void on_change_view_button_clicked();
 
  private:
-  Gtk::VBox vertical_box_;
-  Gtk::Box main_box_;
+  Gtk::VBox main_box_;
   Gtk::Window window_;
+  Gtk::ButtonBox button_box_;
+  Gtk::Button change_view_button_;
   Gtk::Button sorted_books_button_;
   Gtk::Button add_button_;
   Gtk::ScrolledWindow scrolled_window_;
