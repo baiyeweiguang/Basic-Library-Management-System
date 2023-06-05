@@ -29,24 +29,6 @@ class Book {
     Gtk::TreeModelColumn<Glib::ustring> publication_date;
   };
 
-  class SalesColumnRecord : public Gtk::TreeModel::ColumnRecord {
-   public:
-    SalesColumnRecord() {
-      this->ColumnRecord::add(id);
-      this->ColumnRecord::add(title);
-      this->ColumnRecord::add(quantity);
-      this->ColumnRecord::add(unit_price);
-      this->ColumnRecord::add(total_price);
-      this->ColumnRecord::add(avg_price);
-    }
-    Gtk::TreeModelColumn<int> id;
-    Gtk::TreeModelColumn<Glib::ustring> title;
-    Gtk::TreeModelColumn<int> quantity;
-    Gtk::TreeModelColumn<double> unit_price;
-    Gtk::TreeModelColumn<double> total_price;
-    Gtk::TreeModelColumn<double> avg_price;
-  };
-
   Book(int id, const std::string &title, int category_id,
        const std::string &isbn);
   Book(const std::string &title, int category_id, const std::string &isbn);

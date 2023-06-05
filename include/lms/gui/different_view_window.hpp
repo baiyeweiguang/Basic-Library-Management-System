@@ -22,11 +22,21 @@ class DifferentViewWindow : public Gtk::Dialog {
   void refresh_view(const std::string &view_name);
 
  private:
+  class SqlColumns : public Gtk::TreeModel::ColumnRecord {
+   public:
+    explicit SqlColumns(int size) {
+      for (int i = 0; i < size; ++i) {
+        sql_columns.emplace_back();
+        this->Gtk::TreeModel::ColumnRecord::add(sql_columns.back());
+      }
+    }
+    std::vector<Gtk::TreeModelColumn<Glib::ustring>> sql_columns;
+  };
+
   Gtk::ComboBoxText view_selector_;
   Gtk::ScrolledWindow scrolled_window_;
   Gtk::TreeView tree_view_;
   Glib::RefPtr<Gtk::ListStore> list_store_;
-  Book::SalesColumnRecord sale_columns_;
   Book::ColumnRecord book_columns_;
   Database::SharedPtr database_;
 };

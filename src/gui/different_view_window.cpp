@@ -16,8 +16,9 @@ DifferentViewWindow::DifferentViewWindow(Database::SharedPtr database)
   this->Dialog::set_position(Gtk::WIN_POS_CENTER);
 
   // Set up the view selector
-  view_selector_.append("Books with Information");
+  view_selector_.append("Book Details");
   view_selector_.append("Sales");
+  view_selector_.append("Category Details");
   view_selector_.set_active(1);
   view_selector_.signal_changed().connect(
       sigc::mem_fun(*this, &DifferentViewWindow::on_view_selector_changed));
@@ -32,8 +33,7 @@ DifferentViewWindow::DifferentViewWindow(Database::SharedPtr database)
   this->refresh_view("Sales");
 
   scrolled_window_.add(tree_view_);
-  this->Dialog::get_content_area()->pack_start(scrolled_window_,
-                                               Gtk::PACK_SHRINK);
+  this->Dialog::get_content_area()->pack_start(scrolled_window_);
   // Show all children
   this->Dialog::show_all_children();
 }
@@ -43,60 +43,44 @@ void DifferentViewWindow::on_view_selector_changed() {
 }
 
 void DifferentViewWindow::refresh_view(const std::string &view_name) {
-  if (view_name == "Books with Information") {
-    std::vector<Book> books = database_->get_books();
+  std::string query;
+  if (view_name == "Book Details") {
+    query = "SELECT * FROM book_details";
+  } else if (view_name == "Sales") {
+    query = "SELECT * FROM book_prices";
+  } else if (view_name == "Category Details") {
+    query = "SELECT * FROM category_details";
+  }
+  auto result_set = database_->execute_query(query);
 
-    list_store_.reset();
-    tree_view_.remove_all_columns();
-    list_store_ = Gtk::ListStore::create(book_columns_);
-    tree_view_.set_model(list_store_);
-    tree_view_.append_column("ID", book_columns_.id);
-    tree_view_.append_column("Title", book_columns_.title);
-    tree_view_.append_column("Category", book_columns_.category);
-    tree_view_.append_column("Author", book_columns_.author);
-    tree_view_.append_column("ISBN", book_columns_.isbn);
-    tree_view_.append_column("Publication Date",
-                             book_columns_.publication_date);
-    for (const auto &book : books) {
-      auto row = *(list_store_->append());
-      row[book_columns_.id] = book.get_id();
-      row[book_columns_.title] = book.get_title();
-      row[book_columns_.category] =
-          database_->get_category_name_by_id(book.get_category_id());
-      row[book_columns_.author] =
-          database_->get_author_name_by_book_id(book.get_id());
-      row[book_columns_.isbn] = book.get_isbn();
-      std::string publication_date =
-          std::to_string(book.get_publication_date().tm_year + 1900) + "-" +
-          std::to_string(book.get_publication_date().tm_mon + 1) + "-" +
-          std::to_string(book.get_publication_date().tm_mday);
-      row[book_columns_.publication_date] = publication_date;
+  tree_view_.remove_all_columns();
+  if (result_set == nullptr) {
+    return;
+  }
+
+  // Get the metadata for the result set
+  sql::ResultSetMetaData* metadata = result_set->getMetaData();
+  int num_columns = metadata->getColumnCount();
+  SqlColumns columns(num_columns);
+  list_store_ = Gtk::ListStore::create(columns);
+
+  // Add the columns to the tree view
+  for (int i = 0; i < num_columns; i++) {
+    std::string title = metadata->getColumnLabel(i + 1);
+    tree_view_.append_column(title, columns.sql_columns[i]);
+  }
+
+  // Add the rows to the list store
+  while (result_set->next()) {
+    Gtk::TreeModel::Row row = *(list_store_->append());
+    for (int i = 0; i < num_columns; i++) {
+      row[columns.sql_columns[i]] =
+          static_cast<std::string>(result_set->getString(i + 1));
     }
   }
-  if (view_name == "Sales") {
-    std::vector<Sale> sales = database_->get_sales();
-    list_store_.reset();
-    list_store_ = Gtk::ListStore::create(sale_columns_);
-    tree_view_.set_model(list_store_);
-    tree_view_.remove_all_columns();
-    tree_view_.append_column("ID", sale_columns_.id);
-    tree_view_.append_column("Title", sale_columns_.title);
-    tree_view_.append_column("Quantity", sale_columns_.quantity);
-    tree_view_.append_column("Unit Price", sale_columns_.unit_price);
-    tree_view_.append_column("Total Price", sale_columns_.total_price);
-    tree_view_.append_column("Average Price", sale_columns_.avg_price);
-    for (const auto &sale : sales) {
-      auto row = *(list_store_->append());
-      int book_id = sale.get_book_id();
-      row[sale_columns_.id] = book_id;
-      row[sale_columns_.title] = database_->get_book_by_id(book_id).get_title();
-      row[sale_columns_.quantity] = sale.get_quantity();
-      row[sale_columns_.unit_price] = sale.get_unit_price();
-      row[sale_columns_.total_price] =
-          database_->get_total_sales_by_id(sale.get_id());
-      row[sale_columns_.avg_price] = database_->get_avg_price_from_sales();
-    }
-  }
+
+  // Attach the list store to the tree view
+  tree_view_.set_model(list_store_);
 }
 
 }  // namespace lms

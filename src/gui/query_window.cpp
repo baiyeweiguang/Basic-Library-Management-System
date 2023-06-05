@@ -29,13 +29,16 @@ QueryWindow::QueryWindow(Database::SharedPtr database)
 }
 
 void QueryWindow::update_tree_view(std::unique_ptr<sql::ResultSet> result_set) {
+  tree_view_.remove_all_columns();
 
-  std::cout << "update_tree_view" << std::endl;
+  if (result_set == nullptr) {
+    return;
+  }
+
   // Get the metadata for the result set
   sql::ResultSetMetaData* metadata = result_set->getMetaData();
   int num_columns = metadata->getColumnCount();
   SqlColumns columns(num_columns);
-
   list_store_ = Gtk::ListStore::create(columns);
 
   // Add the columns to the tree view
@@ -60,9 +63,7 @@ void QueryWindow::update_tree_view(std::unique_ptr<sql::ResultSet> result_set) {
 void QueryWindow::on_button_clicked() {
   std::string query = entry_.get_text();
   auto result = database_->execute_query(query);
-  if (result != nullptr) {
-    this->update_tree_view(std::move(result));
-  }
+  this->update_tree_view(std::move(result));
 }
 
 }  // namespace lms
