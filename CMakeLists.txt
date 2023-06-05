@@ -15,16 +15,16 @@ find_library(MySQLCppConnector_LIBRARIES mysqlcppconn)
 
 set(SRC
         src/main.cpp
-        src/add_book_window.cpp
-        src/book.cpp
-        src/author.cpp
-        src/sale.cpp
-        src/database.cpp
-        src/edit_book_window.cpp
-        src/sorted_window.cpp
-        src/different_view_window.cpp
-        src/query_window.cpp
-        src/main_window.cpp)
+        src/gui/add_book_window.cpp
+        src/database/book.cpp
+        src/database/author.cpp
+        src/database/sale.cpp
+        src/database/database.cpp
+        src/gui/edit_book_window.cpp
+        src/gui/sorted_window.cpp
+        src/gui/different_view_window.cpp
+        src/gui/query_window.cpp
+        src/gui/main_window.cpp)
 add_executable(library_management_system ${SRC})
 target_include_directories(library_management_system PUBLIC
         include

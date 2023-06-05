@@ -1,4 +1,4 @@
-#include "lms/sorted_books_window.hpp"
+#include "lms/gui/sorted_books_window.hpp"
 
 #include <algorithm>
 

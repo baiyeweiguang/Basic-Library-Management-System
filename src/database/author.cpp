@@ -1,4 +1,4 @@
-#include "lms/author.hpp"
+#include "lms/database/author.hpp"
 
 namespace lms {
 

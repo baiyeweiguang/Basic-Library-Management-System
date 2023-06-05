@@ -5,7 +5,7 @@
 #include <gtkmm.h>
 
 // Project
-#include "lms/database.hpp"
+#include "lms/database/database.hpp"
 
 namespace lms {
 

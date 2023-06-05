@@ -1,4 +1,4 @@
-#include "lms/edit_book_window.hpp"
+#include "lms/gui/edit_book_window.hpp"
 #include <string>
 
 namespace lms {

@@ -1,4 +1,4 @@
-#include "lms/query_window.hpp"
+#include "lms/gui/query_window.hpp"
 
 namespace lms {
 QueryWindow::QueryWindow(Database::SharedPtr database)

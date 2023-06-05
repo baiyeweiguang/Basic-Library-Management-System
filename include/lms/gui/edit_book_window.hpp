@@ -8,8 +8,8 @@
 #include <gtkmm.h>
 
 // Project
-#include "book.hpp"
-#include "database.hpp"
+#include "lms/database/book.hpp"
+#include "lms/database/database.hpp"
 
 namespace lms {
 

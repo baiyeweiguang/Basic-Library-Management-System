@@ -2,8 +2,8 @@
 #include <gtkmm/application.h>
 
 // Project
-#include "lms/database.hpp"
-#include "lms/main_window.hpp"
+#include "lms/database/database.hpp"
+#include "lms/gui/main_window.hpp"
 
 int main(int argc, char* argv[]) {
   auto app = Gtk::Application::create(argc, argv, "com.example.library");

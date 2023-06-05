@@ -1,6 +1,6 @@
-#include "lms/add_book_window.hpp"
-#include "lms/author.hpp"
-#include "lms/sale.hpp"
+#include "lms/gui/add_book_window.hpp"
+#include "lms/database/author.hpp"
+#include "lms/database/sale.hpp"
 
 namespace lms {
 AddBookWindow::AddBookWindow(Database::SharedPtr database)

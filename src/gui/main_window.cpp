@@ -1,9 +1,9 @@
-#include "lms/main_window.hpp"
-#include "lms/add_book_window.hpp"
-#include "lms/different_view_window.hpp"
-#include "lms/edit_book_window.hpp"
-#include "lms/query_window.hpp"
-#include "lms/sorted_books_window.hpp"
+#include "lms/gui/main_window.hpp"
+#include "lms/gui/add_book_window.hpp"
+#include "lms/gui/different_view_window.hpp"
+#include "lms/gui/edit_book_window.hpp"
+#include "lms/gui/query_window.hpp"
+#include "lms/gui/sorted_books_window.hpp"
 
 namespace lms {
 MainWindow::MainWindow(Database::SharedPtr database)

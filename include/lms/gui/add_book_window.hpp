@@ -5,7 +5,7 @@
 #include <gtkmm.h>
 
 // Project
-#include "database.hpp"
+#include "lms/database/database.hpp"
 
 namespace lms {
 class AddBookWindow : public Gtk::Dialog {

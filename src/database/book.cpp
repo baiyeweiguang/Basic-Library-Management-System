@@ -1,4 +1,4 @@
-#include "lms/book.hpp"
+#include "lms/database/book.hpp"
 
 namespace lms {
 Book::Book(int id, const std::string &title, int category_id,

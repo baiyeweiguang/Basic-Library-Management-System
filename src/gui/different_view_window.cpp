@@ -1,4 +1,4 @@
-#include "lms/different_view_window.hpp"
+#include "lms/gui/different_view_window.hpp"
 
 namespace lms {
 DifferentViewWindow::DifferentViewWindow(Database::SharedPtr database)

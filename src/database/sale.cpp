@@ -1,4 +1,4 @@
-#include "lms/sale.hpp"
+#include "lms/database/sale.hpp"
 
 namespace lms {
 Sale::Sale(int id, int book_id, int quantity, double unit_price)
