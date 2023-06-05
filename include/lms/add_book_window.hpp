@@ -3,6 +3,7 @@
 
 // GTKMM
 #include <gtkmm.h>
+
 // Project
 #include "database.hpp"
 

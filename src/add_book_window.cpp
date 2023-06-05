@@ -56,8 +56,11 @@ AddBookWindow::AddBookWindow(Database::SharedPtr database)
   category_combobox_.append("4: 历史");
   category_combobox_.append("5: 生活");
   category_combobox_.append("6: 体育");
+  category_combobox_.set_active(0);
   sex_combobox_.append("Man");
   sex_combobox_.append("Female");
+  sex_combobox_.set_active(0);
+  country_entry_.set_text("China");
 }
 
 void AddBookWindow::on_response(int response_id) {

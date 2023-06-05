@@ -23,6 +23,7 @@ set(SRC
         src/edit_book_window.cpp
         src/sorted_window.cpp
         src/different_view_window.cpp
+        src/query_window.cpp
         src/main_window.cpp)
 add_executable(library_management_system ${SRC})
 target_include_directories(library_management_system PUBLIC

@@ -2,12 +2,14 @@
 #include "lms/add_book_window.hpp"
 #include "lms/different_view_window.hpp"
 #include "lms/edit_book_window.hpp"
+#include "lms/query_window.hpp"
 #include "lms/sorted_books_window.hpp"
 
 namespace lms {
 MainWindow::MainWindow(Database::SharedPtr database)
     : database_(database),
       add_button_("Add Book"),
+      query_button_("Do Query"),
       sorted_books_button_("Sort"),
       change_view_button_("Change View"),
       button_box_(Gtk::ORIENTATION_HORIZONTAL) {
@@ -25,10 +27,13 @@ MainWindow::MainWindow(Database::SharedPtr database)
   change_view_button_.signal_clicked().connect(
       sigc::mem_fun(*this, &MainWindow::on_change_view_button_clicked));
   change_view_button_.override_color(Gdk::RGBA("red"));
+  query_button_.signal_clicked().connect(
+      sigc::mem_fun(*this, &MainWindow::on_query_button_clicked));
   button_box_.pack_start(add_button_, Gtk::PACK_SHRINK);
   button_box_.pack_start(sorted_books_button_, Gtk::PACK_SHRINK);
   button_box_.pack_start(change_view_button_, Gtk::PACK_SHRINK);
   main_box_.pack_start(button_box_, Gtk::PACK_SHRINK);
+  main_box_.pack_start(query_button_, Gtk::PACK_SHRINK);
 
   list_store_ = Gtk::ListStore::create(columns_);
   tree_view_.set_model(list_store_);
@@ -83,6 +88,12 @@ void MainWindow::on_tree_view_row_activated(const Gtk::TreeModel::Path &path,
   }
 }
 
+void MainWindow::on_query_button_clicked() {
+  QueryWindow query_window(database_);
+  query_window.run();
+  this->refresh_books();
+}
+
 void MainWindow::refresh_books() {
   list_store_->clear();
   std::vector<Book> books = database_->get_books();
@@ -93,8 +104,7 @@ void MainWindow::refresh_books() {
     std::string category_name =
         database_->get_category_name_by_id(book.get_category_id());
     row[columns_.category] = category_name;
-    row[columns_.author] =
-        database_->get_author_name_by_book_id(book.get_id());
+    row[columns_.author] = database_->get_author_name_by_book_id(book.get_id());
     row[columns_.isbn] = book.get_isbn();
     std::string publication_date =
         std::to_string(book.get_publication_date().tm_year + 1900) + "-" +

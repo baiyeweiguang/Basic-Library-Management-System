@@ -43,8 +43,9 @@ void DifferentViewWindow::on_view_selector_changed() {
 }
 
 void DifferentViewWindow::refresh_view(const std::string &view_name) {
-  std::vector<Book> books = database_->get_books();
   if (view_name == "Books with Information") {
+    std::vector<Book> books = database_->get_books();
+
     list_store_.reset();
     tree_view_.remove_all_columns();
     list_store_ = Gtk::ListStore::create(book_columns_);
@@ -73,6 +74,7 @@ void DifferentViewWindow::refresh_view(const std::string &view_name) {
     }
   }
   if (view_name == "Sales") {
+    std::vector<Sale> sales = database_->get_sales();
     list_store_.reset();
     list_store_ = Gtk::ListStore::create(sale_columns_);
     tree_view_.set_model(list_store_);
@@ -83,15 +85,15 @@ void DifferentViewWindow::refresh_view(const std::string &view_name) {
     tree_view_.append_column("Unit Price", sale_columns_.unit_price);
     tree_view_.append_column("Total Price", sale_columns_.total_price);
     tree_view_.append_column("Average Price", sale_columns_.avg_price);
-    for (const auto &book : books) {
-      int sale_id = database_->get_sale_id_by_book_id(book.get_id());
+    for (const auto &sale : sales) {
       auto row = *(list_store_->append());
-      row[sale_columns_.id] = book.get_id();
-      row[sale_columns_.title] = book.get_title();
-      row[sale_columns_.quantity] = database_->get_quantity_by_id(sale_id);
-      row[sale_columns_.unit_price] = database_->get_unit_price_by_id(sale_id);
+      int book_id = sale.get_book_id();
+      row[sale_columns_.id] = book_id;
+      row[sale_columns_.title] = database_->get_book_by_id(book_id).get_title();
+      row[sale_columns_.quantity] = sale.get_quantity();
+      row[sale_columns_.unit_price] = sale.get_unit_price();
       row[sale_columns_.total_price] =
-          database_->get_total_sales_by_id(sale_id);
+          database_->get_total_sales_by_id(sale.get_id());
       row[sale_columns_.avg_price] = database_->get_avg_price_from_sales();
     }
   }

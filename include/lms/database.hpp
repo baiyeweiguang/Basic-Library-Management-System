@@ -32,19 +32,25 @@ class Database {
   Database(const DatabaseConfig &config);
   ~Database() = default;
 
+  std::unique_ptr<sql::ResultSet> execute_query(const std::string &query);
+
   int add_book(const Book &book);
   int add_author(const Author &author);
   int add_sale(const Sale &sale);
   int delete_book(int id);
   int update_book(const Book &book);
+  int update_book(int id);
+  int delete_author(int id);
+  int update_author(const Author &author);
+  int delete_sale(int id);
+  int update_sale(const Sale &sale);
   int get_last_insert_book_id();
   int get_last_insert_author_id();
   double get_total_sales_by_id(int id);
-  double get_unit_price_by_id(int id);
-  int get_quantity_by_id(int id);
   double get_avg_price_from_sales();
-  int get_sale_id_by_book_id(int id);
   Book get_book_by_id(int id);
+  Sale get_sale_by_id(int id);
+  Author get_author_by_id(int id);
   std::string get_category_name_by_id(int id);
   std::string get_author_name_by_book_id(int id);
   std::vector<std::pair<std::string, int>> get_book_count_by_category();

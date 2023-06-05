@@ -1,3 +1,23 @@
+我用Mysql创建了这四个表格，帮我设计两个视图，将他们漂亮地连接起来：
+CREATE TABLE `categories` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+)
+
+CREATE TABLE `books` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `isbn` varchar(20) NOT NULL,
+  `category_id` int DEFAULT NULL,
+  `publication_date` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `isbn` (`isbn`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `books_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
+)
+
 CREATE TABLE book_authors (
     id INT PRIMARY KEY AUTO_INCREMENT,
     book_id INT NOT NULL,
